@@ -1,0 +1,1 @@
+Running the script in clox/scripts will output the program to this directory
