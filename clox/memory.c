@@ -5,18 +5,24 @@
 #include "vm.h"
 
 void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
-    if (newSize == 0) {
-        free(pointer);
-        return NULL;
-    }
+  if (newSize == 0) {
+    free(pointer);
+    return NULL;
+  }
 
-    void* result = realloc(pointer, newSize);
-    if (result == NULL) exit(1);
-    return result;
+  void* result = realloc(pointer, newSize);
+  if (result == NULL) exit(1);
+  return result;
 }
 
 static void freeObject(Obj* object) {
   switch (object->type) {
+    case OBJ_CLOSURE: {
+      ObjClosure* closure = (ObjClosure*)object;
+      FREE_ARRAY(ObjUpvalue*, closure->upvalues, closure->upvalueCount);
+      FREE(ObjClosure, object);
+      break;
+    }
     case OBJ_FUNCTION: {
       ObjFunction* function = (ObjFunction*)object;
       freeChunk(&function->chunk);
@@ -32,14 +38,17 @@ static void freeObject(Obj* object) {
       FREE(ObjString, object);
       break;
     }
+    case OBJ_UPVALUE:
+      FREE(ObjUpvalue, object);
+      break;
   }
 }
 
 void freeObjects() {
-    Obj* obj = vm.objects;
-    while (obj != NULL) {
-        Obj* next = obj->next;
-        freeObject(obj);
-        obj = next;
-    }
+  Obj* obj = vm.objects;
+  while (obj != NULL) {
+    Obj* next = obj->next;
+    freeObject(obj);
+    obj = next;
+  }
 }
