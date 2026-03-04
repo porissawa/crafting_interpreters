@@ -15,6 +15,14 @@ fun outer() {
 
 outer();
 
-var start = clock();
-print fib(35);
-print clock() - start;
+// var start = clock();
+// print fib(35);
+// print clock() - start;
+
+class Pair {}
+
+var pair = Pair();
+pair.first = 1;
+pair.second = 2;
+print "pair.first + pair.second = ";
+print pair.first + pair.second;
