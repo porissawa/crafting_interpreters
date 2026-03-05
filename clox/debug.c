@@ -58,8 +58,7 @@ int disassembleInstruction(Chunk* chunk, int offset) {
     }
 
     uint8_t instruction = chunk->code[offset];
-    switch (instruction)
-    {
+    switch (instruction) {
     case OP_CONSTANT:
         return constantInstruction("OP_CONSTANT", chunk, offset);
     case OP_NIL:
@@ -73,7 +72,7 @@ int disassembleInstruction(Chunk* chunk, int offset) {
     case OP_GET_LOCAL:
       return byteInstruction("OP_GET_LOCAL", chunk, offset);
     case OP_SET_LOCAL:
-      return byteInstruction("OP_SET_LOCAL", chunk, offset);
+        return byteInstruction("OP_SET_LOCAL", chunk, offset);
     case OP_GET_GLOBAL:
         return constantInstruction("OP_GET_GLOBAL", chunk, offset);
     case OP_DEFINE_GLOBAL:
@@ -85,9 +84,11 @@ int disassembleInstruction(Chunk* chunk, int offset) {
     case OP_SET_UPVALUE:
         return byteInstruction("OP_SET_UPVALUE", chunk, offset);
     case OP_GET_PROPERTY:
-      return constantInstruction("OP_GET_PROPERTY", chunk, offset);
+        return constantInstruction("OP_GET_PROPERTY", chunk, offset);
     case OP_SET_PROPERTY:
-      return constantInstruction("OP_SET_PROPERTY", chunk, offset);
+        return constantInstruction("OP_SET_PROPERTY", chunk, offset);
+    case OP_GET_SUPER:
+        return constantInstruction("OP_GET_SUPER", chunk, offset);
     case OP_EQUAL:
         return simpleInstruction("OP_EQUAL", offset);
     case OP_ADD:
@@ -114,6 +115,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
         return byteInstruction("OP_CALL", chunk, offset);
     case OP_INVOKE:
         return invokeInstruction("OP_INVOKE", chunk, offset);
+    case OP_SUPER_INVOKE:
+        return invokeInstruction("OP_SUPER_INVOKE", chunk, offset);
     case OP_CLOSURE: {
         offset++;
         uint8_t constant = chunk->code[offset++];
@@ -136,6 +139,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
         return simpleInstruction("OP_RETURN", offset);
     case OP_CLASS:
         return constantInstruction("OP_CLASS", chunk, offset);
+    case OP_INHERIT:
+        return simpleInstruction("OP_INHERIT", offset);
     case OP_METHOD:
         return constantInstruction("OP_METHOD", chunk, offset);
     default:

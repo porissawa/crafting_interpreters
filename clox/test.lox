@@ -1,28 +1,92 @@
+print "one";
+print true;
+print 2 + 1;
+
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+  var a = "outer a";
+  var b = "outer b";
+  {
+    var a = "inner a";
+    print a;
+    print b;
+    print c;
+  }
+  print a;
+  print b;
+  print c;
+}
+print a;
+print b;
+print c;
+
+{
+  var a = 1;
+  {
+    a = a + 2;
+    print a;
+  }
+}
+
+print "Basic function test";
+
+fun sayHi(first, last) {
+  print "Hi, " + first + " " + last + "!";
+}
+sayHi("Dear", "Reader");
+
+print "Recursive fib test";
 fun fib(n) {
-  if (n < 2) return n;
+  if (n <= 1) return n;
   return fib(n - 2) + fib(n - 1);
 }
 
-var x = "global";
-
-fun outer() {
-  var x = "outer";
-  fun inner() {
-    print x;
-  }
-  inner();
+for (var i = 5; i < 10; i = i + 1) {
+  print fib(i);
 }
 
-outer();
+print "Counter test";
+fun makeCounter() {
+  var i = 0;
+  fun count() {
+    i = i + 1;
+    print i;
+  }
 
-// var start = clock();
-// print fib(35);
-// print clock() - start;
+  return count;
+}
 
-class Pair {}
+var counter = makeCounter();
+counter();
+counter();
 
-var pair = Pair();
-pair.first = 1;
-pair.second = 2;
-print "pair.first + pair.second = ";
-print pair.first + pair.second;
+print "scoping test";
+var a = "global";
+{
+  fun showA() {
+    print a;
+  }
+
+  showA();
+  var a = "block";
+  showA();
+}
+
+
+print "super call test";
+class Doughnut {
+  cook() {
+    print "Fry until golden brown.";
+  }
+}
+
+class BostonCream < Doughnut {
+  cook() {
+    super.cook();
+    print "Pipe full of custard and coat with chocolate.";
+  }
+}
+
+BostonCream().cook();
